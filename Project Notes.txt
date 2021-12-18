@@ -1,0 +1,6 @@
+Project Plan - learn how to pack and unpack the gladius (gamecube) ISO and re-write the code neatly into a tkinter GUI for ease along
+ - Write the unpacker portion
+ - Write the repacker portion
+ - Refactor both to re-use functions
+ - Create a simple UI to unpack the gladius ISO (.bat files should show vars needed)
+ - Add the repacking option to the UI
