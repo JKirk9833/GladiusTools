@@ -1,26 +1,87 @@
 import argparse
 
-
+# This class handles the creation and parsing of arguments for the application
 class Parser:
     def __init__(self):
+        self.parser = argparse.ArgumentParser()
         self.args = self.build()
 
     def build(self):
-        parser = argparse.ArgumentParser()
-        group = parser.add_mutually_exclusive_group(required=True)
+        sp = self.parser.add_subparsers(dest="command")
 
-        # Commands to parse here
-        self.init_debug_commands(group)
+        self.init_echo(sp)
+        self.init_unpack_iso(sp)
+        self.init_unpack_bec(sp)
 
-        return parser.parse_args()
+        return self.parser.parse_args()
 
-    # Commands written for playing with argparse
-    def init_debug_commands(self, group):
-        group.add_argument(
-            "-echo",
+    def init_echo(self, sp):
+        echo = sp.add_parser(
+            "echo", help="echo will print all following text to the console"
+        )
+        echo.add_argument(
+            "text",
             action="store",
             nargs="+",
             type=str,
-            metavar=("text"),
-            help="Test command written to play around with argparse",
+            help="Text to print to the console",
+        )
+
+    def init_unpack_iso(self, sp):
+        unpack_iso = sp.add_parser("unpack_iso", help="Unpacks files from an iso")
+        unpack_iso.add_argument(
+            "unpack_iso",
+            action="store_true",
+            help="Unpacks files from an iso",
+        )
+        unpack_iso.add_argument(
+            "--output_dir",
+            nargs="?",
+            type=str,
+            action="store",
+            default="./gladiusVANILLA/",
+            help="Default: ./gladiusVANILLA/",
+        )
+        unpack_iso.add_argument(
+            "--file_path",
+            nargs="?",
+            type=str,
+            action="store",
+            default="./gladiusVANILLA.iso",
+            help="Default: ./gladiusVANILLA.iso",
+        )
+        unpack_iso.add_argument(
+            "--filelist",
+            nargs="?",
+            type=str,
+            action="store",
+            default="./gladiusVANILLA/gladiusVANILLA_FileList.txt",
+            help="Default: ./gladiusVANILLA/gladiusVANILLA_FileList.txt",
+        )
+
+    # TODO - update default values of filepath and outputdir paths
+    def init_unpack_bec(self, sp):
+        unpack_bec = sp.add_parser(
+            "unpack_bec", help="Unpacks files from a bec-archive"
+        )
+        unpack_bec.add_argument(
+            "unpack_bec",
+            action="store_true",
+            help="Unpacks files from a bec-archive",
+        )
+        unpack_bec.add_argument(
+            "--output_dir",
+            nargs="?",
+            type=str,
+            action="store",
+            default="./",
+            help="Default: ./",
+        )
+        unpack_bec.add_argument(
+            "--file_path",
+            nargs="?",
+            type=str,
+            action="store",
+            default="./gladiusVANILLA.iso",
+            help="Default: ./gladiusVANILLA.iso",
         )
