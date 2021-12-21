@@ -1,7 +1,7 @@
 from utils.isotools.iso import Iso
 from utils.helpers.file_helper import align_adr, create_file
 from utils.helpers.type_helper import read_byte, read_unk_string, read_word
-from utils.isotools.iso_dir_name import DirName
+from utils.isotools.unpack.iso_dir_name import DirName
 
 # TODO - finish the unpacking process, there's still shit in there
 # TODO - Refactor the code handling url processing in write_basic_data
@@ -84,13 +84,7 @@ class IsoUnpacker:
 
         for i in range(10):
             output += (
-                "Data "
-                + hex(data_pos[i])
-                + ":   "
-                + hex(data_mem[i])
-                + " - "
-                + hex(data_size[i])
-                + "\n"
+                f"Data{hex(data_pos[i])} : {hex(data_mem[i])} - {hex(data_size[i])}\n"
             )
 
         output += "\n"
@@ -98,24 +92,24 @@ class IsoUnpacker:
         # TODO - merge the for loops together for performance yay smiley face
         # Write text sections to file
         for i in range(6):
-            iso.write_and_store(
+            iso.write_to_file(
                 self.output_dir + "code/",
-                "Text_" + hex(text_mem[i]) + ".bin",
+                f"Text_{hex(text_mem[i])}.bin",
                 dol_start + text_pos[i],
                 text_size[i],
             )
 
         # Write data sections to file
         for i in range(10):
-            iso.write_and_store(
-                self.output_dir + "code/",
-                "Data_" + hex(data_mem[i]) + ".bin",
+            iso.write_to_file(
+                f"{self.output_dir}code/",
+                f"Data_{hex(data_mem[i])}.bin",
                 dol_start + data_pos[i],
                 data_size[i],
             )
 
         tot_size = align_adr(tot_size, 0x100)  # WHAT IS IT DOING
-        iso.write_to_file(self.output_dir, "bootfile.dol", dol_start, tot_size)
+        iso.write_and_store(self.output_dir, "bootfile.dol", dol_start, tot_size)
 
         return output
 
@@ -150,7 +144,7 @@ class IsoUnpacker:
             (read_word(iso.file, base_address + offset + 0x0)) & 0xFFFFFF
         ) + string_table
         string = read_unk_string(iso.file, base_address + offset_string, 0x20)
-        parent_offset = read_word(iso.file, base_address + offset + 0x4)
+        # parent_offset = read_word(iso.file, base_address + offset + 0x4)
         next_offset = read_word(iso.file, base_address + offset + 0x8)
 
         if offset == 0:
@@ -172,7 +166,6 @@ class IsoUnpacker:
         file_length = read_word(iso.file, base_address + offset + 0x8)
         if string == "":
             string = "Unknown_" + hex(file_offset) + ".bin"
-        # print("file name at: " + hex(base_address + offset_string))
 
         iso.write_to_file(
             (self.output_dir + path.replace("//", "/")),

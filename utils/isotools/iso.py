@@ -13,7 +13,7 @@ class Iso:
 
     def write_and_store(self, output_dir, file_name, file_start, file_offset):
         self.write_to_file(output_dir, file_name, file_start, file_offset)
-        self.add_rom_section("/" + file_name, file_start, file_offset)
+        self.add_rom_section(f"/{file_name}", file_start, file_offset)
 
     def write_to_file(self, output_dir, file_name, file_start, file_offset):
         print(f"Writing {file_name}...")

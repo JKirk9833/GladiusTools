@@ -1,6 +1,7 @@
 from utils.parser import Parser
 from utils.bectools.bec_unpacker import BecUnpacker
-from utils.isotools.iso_unpacker import IsoUnpacker
+from utils.isotools.unpack.iso_unpacker import IsoUnpacker
+from utils.isotools.pack.iso_packer import IsoPacker
 
 
 def handle_echo(args):
@@ -12,6 +13,10 @@ def handle_iso_unpack(args):
         raise RuntimeError("output_dir must end with /")
     handler = IsoUnpacker(args.file_path, args.output_dir, args.file_list)
     handler.unpack()
+
+
+def handle_iso_pack(args):
+    handler = IsoPacker()
 
 
 def handle_bec_unpack(args):
@@ -29,6 +34,9 @@ if __name__ == "__main__":
 
     if parser.args.command == "unpack_iso":
         handle_iso_unpack(parser.args)
+
+    if parser.args.command == "pack_iso":
+        handle_iso_pack(parser.args)
 
     if parser.args.command == "unpack_bec":
         handle_bec_unpack(parser.args)
