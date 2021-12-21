@@ -1,5 +1,5 @@
 from utils.isotools.iso import Iso
-from utils.helpers.file_helper import align_adr
+from utils.helpers.file_helper import align_adr, create_file
 from utils.helpers.type_helper import read_byte, read_unk_string, read_word
 from utils.isotools.iso_dir_name import DirName
 
@@ -8,10 +8,10 @@ from utils.isotools.iso_dir_name import DirName
 # All code that pertains to the iso unpacking process stored here
 # https://discourse.world/h/2017/07/24/Gamecube-file-system-device
 class IsoUnpacker:
-    def __init__(self, file_path, output_dir, filelist):
+    def __init__(self, file_path, output_dir, file_list):
         self.file_path = file_path
         self.output_dir = output_dir
-        self.file_list = filelist
+        self.file_list = file_list
         self.dir_list = []
 
     # The function that does everything, just use this please
@@ -29,7 +29,13 @@ class IsoUnpacker:
         header_output += self.write_dol(iso)
         header_output += f"{self.write_basic_data(iso)}\n\n"
 
-        header_output += iso.dump_unknown_sections(self.output_dir)
+        file_list = iso.dump_unknown_sections(self.output_dir)
+        header_output += file_list
+        header_output += iso.rom_map_by_id()
+
+        iso.write_text_to_file(self.output_dir, self.file_list, file_list)
+        iso.write_text_to_file(self.output_dir, "_Header.txt", header_output)
+        print("ZUG ZUG JOB DONE")
 
     # GameCube apploader info: https://www.gc-forever.com/wiki/index.php?title=Apploader
     # I don't fully understand the below and it's difficult to locate

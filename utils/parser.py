@@ -51,12 +51,12 @@ class Parser:
             help="Default: ./gladiusVANILLA.iso",
         )
         unpack_iso.add_argument(
-            "--filelist",
+            "--file_list",
             nargs="?",
             type=str,
             action="store",
-            default="./gladiusVANILLA/gladiusVANILLA_FileList.txt",
-            help="Default: ./gladiusVANILLA/gladiusVANILLA_FileList.txt",
+            default="gladiusVANILLA_FileList.txt",
+            help="Default: gladiusVANILLA_FileList.txt",
         )
 
     # TODO - update default values of filepath and outputdir paths

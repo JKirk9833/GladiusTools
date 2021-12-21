@@ -10,7 +10,7 @@ def handle_echo(args):
 def handle_iso_unpack(args):
     if not args.output_dir.endswith("/"):
         raise RuntimeError("output_dir must end with /")
-    handler = IsoUnpacker(args.file_path, args.output_dir, args.filelist)
+    handler = IsoUnpacker(args.file_path, args.output_dir, args.file_list)
     handler.unpack()
 
 
