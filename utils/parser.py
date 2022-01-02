@@ -69,24 +69,24 @@ class Parser:
             nargs="?",
             type=str,
             action="store",
-            default="./gladiusVANILLA/",
-            help="Default: ./gladiusVANILLA/",
+            default="./gladiusMODDED/",
+            help="Default: ./gladiusMODDED/",
         )
         pack_iso.add_argument(
             "--fst_bin",
             nargs="?",
             type=str,
             action="store",
-            default="./gladiusVANILLA/fst.bin",
-            help="Default: ./gladiusVANILLA/fst.bin",
+            default="./gladiusMODDED/fst.bin",
+            help="Default: ./gladiusMODDED/fst.bin",
         )
         pack_iso.add_argument(
             "--fst_map",
             nargs="?",
             type=str,
             action="store",
-            default="./gladiusVANILLA/gladiusVANILLA_FileList.txt",
-            help="Default: ./gladiusVANILLA/gladiusVANILLA_FileList.txt",
+            default="./gladiusMODDED/gladiusMODDED_FileList.txt",
+            help="Default: ./gladiusMODDED/gladiusMODDED_FileList.txt",
         )
         pack_iso.add_argument(
             "--output_file",
