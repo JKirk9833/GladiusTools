@@ -33,3 +33,19 @@ def align_adr(addr, align_val):
         addr = addr & 0x100000000 - align_val
         addr += align_val
     return addr
+
+
+# Fills any empty bytes with zeroes up to the alignment
+def align_file_size(file, pos, alignment):
+    target = (pos + alignment - 1) & (0x100000000 - alignment)
+    amount = target - pos
+    file.write(b"\0" * amount)
+
+
+# Returns a string containing a human-readable file size
+def get_readable_size(num, suffix="B"):
+    for unit in ["", "K", "M", "G", "T", "P", "E", "Z"]:
+        if abs(num) < 1024.0:
+            return f"{num:3.1f}{unit}{suffix}"
+        num /= 1024.0
+    return f"{num:.1f}Yi{suffix}"

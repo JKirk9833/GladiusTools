@@ -11,6 +11,7 @@ class Parser:
 
         self.init_echo(sp)
         self.init_unpack_iso(sp)
+        self.init_pack_iso(sp)
         self.init_unpack_bec(sp)
 
         return self.parser.parse_args()
@@ -59,7 +60,6 @@ class Parser:
             help="Default: gladiusVANILLA_FileList.txt",
         )
 
-    # TODO - Finish this
     def init_pack_iso(self, sp):
         pack_iso = sp.add_parser(
             "pack_iso", help="Packs a valid folder into an iso file"
@@ -85,8 +85,16 @@ class Parser:
             nargs="?",
             type=str,
             action="store",
-            default="./gladiusVANILLA/fst.bin",
-            help="Default: ./gladiusVANILLA/fst.bin",
+            default="./gladiusVANILLA/gladiusVANILLA_FileList.txt",
+            help="Default: ./gladiusVANILLA/gladiusVANILLA_FileList.txt",
+        )
+        pack_iso.add_argument(
+            "--output_file",
+            nargs="?",
+            type=str,
+            action="store",
+            default="./gladiusMODDED.iso",
+            help="Default: ./gladiusMODDED.iso",
         )
 
     # TODO - update default values of filepath and outputdir paths

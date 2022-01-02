@@ -1,4 +1,4 @@
-from utils.isotools.iso import Iso
+from utils.isotools.unpack.iso import Iso
 from utils.helpers.file_helper import align_adr, create_file
 from utils.helpers.type_helper import read_byte, read_unk_string, read_word
 from utils.isotools.unpack.iso_dir_name import DirName

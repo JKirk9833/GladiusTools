@@ -16,7 +16,8 @@ def handle_iso_unpack(args):
 
 
 def handle_iso_pack(args):
-    handler = IsoPacker()
+    handler = IsoPacker(args.input_dir, args.fst_bin, args.fst_map, args.output_file)
+    handler.pack()
 
 
 def handle_bec_unpack(args):

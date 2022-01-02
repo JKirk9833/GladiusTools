@@ -1,11 +1,12 @@
+from utils.helpers.iso_helper import IsoHelper
 from operator import attrgetter
 from utils.helpers.file_helper import align_adr, create_file, get_filesize
 from utils.helpers.type_helper import read_hex_string, read_string, read_word
 from utils.isotools.iso_rom_section import RomSection
 
 # TODO - Add a verification function to handle the cases that the iso is not found / invalid
-# This class should contain any specific functions pertaining to the iso itself
-class Iso:
+# This class should contain any specific functions pertaining to the reading of the iso itself
+class Iso(IsoHelper):
     def __init__(self, file_path):
         self.file = open(file_path, "rb+")
         self.file_path = file_path
@@ -35,11 +36,6 @@ class Iso:
         file_list_txt.write(text_string)
         print(f"Textfile written successfully: {path}")
 
-    def add_rom_section(self, file_name, file_start, file_offset, file_id=-1):
-        if file_offset > 0:
-            self.rom_map.append(RomSection(file_name, file_start, file_offset, file_id))
-        return None
-
     # Writes the unknown bits into a bunch of nebulous .bin files and returns a filelist
     def dump_unknown_sections(self, output_dir):
         output = ""
@@ -54,8 +50,8 @@ class Iso:
                     old_address,
                     item.file_start - old_address,
                 )
-                output += f"{hex(old_address)} /Unknown_{hex(old_address)}.bin {hex(int(-1))} {hex(item.file_start - old_address)}\n"
-            output += f"{hex(item.file_start)} {str(item.file_name)} {hex(int(item.file_id))} {hex(item.file_offset)}\n"
+                output += f"{hex(old_address)} /Unknown_{hex(old_address)}.bin {hex(item.file_start - old_address)} {hex(int(-1))}\n"
+            output += f"{hex(item.file_start)} {str(item.file_name)} {hex(item.file_offset)} {hex(int(item.file_id))}\n"
             old_address = align_adr(item.file_start + item.file_offset, 4)
 
         return f"{output}\n"
@@ -76,7 +72,7 @@ class Iso:
         offset_string = (read_word(self.file, base_address + 0x0)) & 0xFFFFFF
         parent_offset = read_word(self.file, base_address + 0x4)
         num_entries = read_word(self.file, base_address + 0x8)
-        return f"\nRootDir: + {hex(offset_string)} - {hex(parent_offset)} - {hex(num_entries)}"
+        return f"\nRootDir: {hex(offset_string)} - {hex(parent_offset)} - {hex(num_entries)}"
 
     # It's just cleaner to get the header data here
     def get_basic_headers(self):
