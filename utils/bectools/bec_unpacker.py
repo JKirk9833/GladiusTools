@@ -32,8 +32,8 @@ class BecUnpacker:
     # Returns string of datalines
     def split_rom(self, file):
         output = ""
-        BecHeader = namedtuple(
-            "BecHeader", ["FileAlignment", "NrOfFiles", "HeaderMagic"]
+        bec_header = namedtuple(
+            "bec_header", ["file_alignment", "num_of_files", "header_magic"]
         )
 
         file.seek(0x6)  # Skips past nebulous GLSE64 stamp
@@ -42,16 +42,17 @@ class BecUnpacker:
         # < little endian (endianness is fucking bullshit btw, i know it can be faster but is it worth the complexity addition?)
         # H - unsigned short (2 bytes) - FileAlignment
         # I - unsigned int (4 bytes) - NrOfFiles / HeaderMagic
-        header = BecHeader._make(struct.unpack("<HII", data))
+        header = bec_header._make(struct.unpack("<HII", data))
         print("Header Details: " + str(header))
         output += format_named_tuple(header)
 
-        FileEntry = namedtuple(
-            "FileEntry", ["PathHash", "DataOffset", "CompDataSize", "DataSize"]
+        entry = namedtuple(
+            "file_entry", ["path_hash", "data_offset", "comp_data_size", "data_size"]
         )
         # TODO - finish writing the RomSection class and extend .bex unpacker once ISO tool written
-        for i in range(header.NrOfFiles):
+        for i in range(header.num_of_files):
             data = file.read(0x10)
-            file_entry = FileEntry._make(struct.unpack("<IIII", data))
-            filename = get_filename(file_entry.PathHash, i)
-            print(i)
+            file_entry = entry._make(struct.unpack("<IIII", data))
+            file_name = get_filename(file_entry.path_hash, i)
+            if file_name == f"{i}.bin":
+                print(f"{file_name} | {hex(file_entry.path_hash)}")

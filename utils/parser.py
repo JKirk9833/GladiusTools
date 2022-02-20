@@ -112,14 +112,14 @@ class Parser:
             nargs="?",
             type=str,
             action="store",
-            default="./",
-            help="Default: ./",
+            default="./gladiusMODDED/gladius_bec/",
+            help="Default: ./gladiusMODDED/gladius_bec/",
         )
         unpack_bec.add_argument(
             "--file_path",
             nargs="?",
             type=str,
             action="store",
-            default="./gladiusVANILLA.iso",
-            help="Default: ./gladiusVANILLA.iso",
+            default="./gladiusMODDED/gladius.bec",
+            help="Default: ./gladiusMODDED/gladius.bec",
         )
